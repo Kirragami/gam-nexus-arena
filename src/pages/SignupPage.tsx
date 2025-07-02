@@ -1,5 +1,7 @@
 
 import { useState } from "react";
+import { useMutation } from "@apollo/client";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -8,6 +10,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Gamepad2, Eye, EyeOff } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
+import { REGISTER_USER } from "@/graphql/auth";
 
 const SignupPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -22,6 +25,24 @@ const SignupPage = () => {
     agreeToTerms: false
   });
   const { toast } = useToast();
+  const navigate = useNavigate();
+
+  const [registerMutation, { loading }] = useMutation(REGISTER_USER, {
+    onCompleted: (data) => {
+      toast({
+        title: "Registration successful",
+        description: `Welcome to Gam, ${data.registerUser.firstName || data.registerUser.username}! Please login to continue.`
+      });
+      navigate("/login");
+    },
+    onError: (error) => {
+      toast({
+        title: "Registration failed",
+        description: error.message,
+        variant: "destructive"
+      });
+    }
+  });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -44,10 +65,16 @@ const SignupPage = () => {
       return;
     }
 
-    // TODO: Implement GraphQL registration mutation
-    toast({
-      title: "Registration functionality",
-      description: "GraphQL integration coming soon!"
+    registerMutation({
+      variables: {
+        input: {
+          username: formData.username,
+          email: formData.email,
+          password: formData.password,
+          firstName: formData.firstName || undefined,
+          lastName: formData.lastName || undefined
+        }
+      }
     });
   };
 
@@ -212,9 +239,10 @@ const SignupPage = () => {
 
               <Button 
                 type="submit" 
-                className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold py-2 rounded-lg transition-all duration-300 transform hover:scale-105"
+                disabled={loading}
+                className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold py-2 rounded-lg transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Create Account
+                {loading ? "Creating Account..." : "Create Account"}
               </Button>
             </form>
 

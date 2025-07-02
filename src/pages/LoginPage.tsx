@@ -1,5 +1,7 @@
 
 import { useState } from "react";
+import { useMutation } from "@apollo/client";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -7,6 +9,8 @@ import { Label } from "@/components/ui/label";
 import { Gamepad2, Eye, EyeOff } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
+import { LOGIN_USER } from "@/graphql/auth";
+import { useAuth } from "@/contexts/AuthContext";
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -15,13 +19,37 @@ const LoginPage = () => {
     password: ""
   });
   const { toast } = useToast();
+  const navigate = useNavigate();
+  const { login } = useAuth();
+  
+  const [loginMutation, { loading }] = useMutation(LOGIN_USER, {
+    onCompleted: (data) => {
+      const { accessToken, user } = data.login;
+      login(accessToken, user);
+      toast({
+        title: "Login successful",
+        description: `Welcome back, ${user.firstName || user.username}!`
+      });
+      navigate("/browse");
+    },
+    onError: (error) => {
+      toast({
+        title: "Login failed",
+        description: error.message,
+        variant: "destructive"
+      });
+    }
+  });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Implement GraphQL login mutation
-    toast({
-      title: "Login functionality",
-      description: "GraphQL integration coming soon!"
+    loginMutation({
+      variables: {
+        input: {
+          usernameOrEmail: formData.usernameOrEmail,
+          password: formData.password
+        }
+      }
     });
   };
 
@@ -98,9 +126,10 @@ const LoginPage = () => {
 
               <Button 
                 type="submit" 
-                className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold py-2 rounded-lg transition-all duration-300 transform hover:scale-105"
+                disabled={loading}
+                className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold py-2 rounded-lg transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Sign In
+                {loading ? "Signing In..." : "Sign In"}
               </Button>
             </form>
 
