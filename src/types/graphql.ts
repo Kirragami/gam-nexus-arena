@@ -1,4 +1,3 @@
-
 // GraphQL Types based on your schema
 
 export interface User {
@@ -64,4 +63,74 @@ export interface MeQuery {
 
 export interface UserQuery {
   user: User;
+}
+
+// Game Types
+export interface Game {
+  id: string;
+  title: string;
+  description: string;
+  price: number;
+  rating: number;
+  imageUrl?: string;
+  category: string;
+  platform: string[];
+  releaseDate: string;
+  isActive: boolean;
+  screenshots?: string[];
+  systemRequirements?: SystemRequirements;
+  createdAt: string;
+  updatedAt?: string;
+}
+
+export interface SystemRequirements {
+  minimum: {
+    os: string;
+    processor: string;
+    memory: string;
+    graphics: string;
+    storage: string;
+  };
+  recommended: {
+    os: string;
+    processor: string;
+    memory: string;
+    graphics: string;
+    storage: string;
+  };
+}
+
+export interface GameFilters {
+  category?: string;
+  platform?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  minRating?: number;
+}
+
+export interface GamesResponse {
+  items: Game[];
+  totalCount: number;
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
+}
+
+// GraphQL Query types for games
+export interface GetGamesQuery {
+  games: GamesResponse;
+}
+
+export interface GetGamesVariables {
+  limit?: number;
+  offset?: number;
+  search?: string;
+  filters?: GameFilters;
+}
+
+export interface GetGameQuery {
+  game: Game;
+}
+
+export interface GetGameVariables {
+  id: string;
 }
