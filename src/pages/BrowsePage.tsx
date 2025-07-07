@@ -5,7 +5,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Gamepad2, Search, Filter, Star, AlertCircle } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/contexts/AuthContext";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { GET_GAMES } from "@/graphql/games";
 import { GetGamesQuery, GetGamesVariables } from "@/types/graphql";
@@ -14,6 +14,7 @@ import { gameClient } from "@/lib/apollo/gameClient";
 
 const BrowsePage = () => {
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const [search, setSearch] = useState("");
 
   const { data, loading, error, refetch } = useQuery<GetGamesQuery, GetGamesVariables>(GET_GAMES, {
@@ -44,6 +45,10 @@ const BrowsePage = () => {
       style: 'currency',
       currency: 'USD'
     }).format(price);
+  };
+
+  const handleGameClick = (gameId: string) => {
+    navigate(`/game/${gameId}`);
   };
 
   return (
@@ -130,7 +135,11 @@ const BrowsePage = () => {
         {data?.games?.items && data.games.items.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {data.games.items.map((game) => (
-              <Card key={game.id} className="bg-slate-800/50 border-purple-500/20 backdrop-blur-sm hover:bg-slate-800/70 transition-all duration-300 transform hover:scale-105">
+              <Card 
+                key={game.id} 
+                className="bg-slate-800/50 border-purple-500/20 backdrop-blur-sm hover:bg-slate-800/70 transition-all duration-300 transform hover:scale-105 cursor-pointer"
+                onClick={() => handleGameClick(game.id)}
+              >
                 <CardContent className="p-6">
                   <div className="text-6xl mb-4 text-center">
                     {game.imageUrl ? (
@@ -146,7 +155,6 @@ const BrowsePage = () => {
                     )}
                   </div>
                   <h3 className="text-xl font-semibold text-white mb-2">{game.title}</h3>
-                  {/* <p className="text-gray-400 text-sm mb-4 line-clamp-2">{game.description}</p> */}
                   <div className="flex items-center justify-between mb-4">
                     <span className="text-2xl font-bold text-purple-400">{formatPrice(game.price)}</span>
                     <div className="flex items-center">
@@ -164,8 +172,14 @@ const BrowsePage = () => {
                       </span>
                     ))}
                   </div>
-                  <Button className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700">
-                    Add to Cart
+                  <Button 
+                    className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleGameClick(game.id);
+                    }}
+                  >
+                    View Details
                   </Button>
                 </CardContent>
               </Card>
