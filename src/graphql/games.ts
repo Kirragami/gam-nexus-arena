@@ -12,7 +12,7 @@ export const GET_GAMES = gql`
         rating
         imageUrl
         category
-        platform
+        platforms
         releaseDate
         isActive
         createdAt
@@ -34,7 +34,7 @@ export const GET_GAME_BY_ID = gql`
       rating
       imageUrl
       category
-      platform
+      platforms
       releaseDate
       isActive
       screenshots

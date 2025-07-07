@@ -74,13 +74,15 @@ export interface Game {
   rating: number;
   imageUrl?: string;
   category: string;
-  platform: string[];
+  platforms: string[];
   releaseDate: string;
   isActive: boolean;
   screenshots?: string[];
   systemRequirements?: SystemRequirements;
+  developer: string,
+  publisher: string,
+  tags: string[],
   createdAt: string;
-  updatedAt?: string;
 }
 
 export interface SystemRequirements {
@@ -134,3 +136,5 @@ export interface GetGameQuery {
 export interface GetGameVariables {
   id: string;
 }
+
+

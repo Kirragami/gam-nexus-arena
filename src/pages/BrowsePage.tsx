@@ -10,12 +10,14 @@ import { useQuery } from "@apollo/client";
 import { GET_GAMES } from "@/graphql/games";
 import { GetGamesQuery, GetGamesVariables } from "@/types/graphql";
 import { useState } from "react";
+import { gameClient } from "@/lib/apollo/gameClient";
 
 const BrowsePage = () => {
   const { user, logout } = useAuth();
   const [search, setSearch] = useState("");
 
   const { data, loading, error, refetch } = useQuery<GetGamesQuery, GetGamesVariables>(GET_GAMES, {
+    client: gameClient,
     variables: {
       limit: 12,
       offset: 0,
@@ -135,7 +137,7 @@ const BrowsePage = () => {
                       <img 
                         src={game.imageUrl} 
                         alt={game.title}
-                        className="w-16 h-16 mx-auto object-cover rounded"
+                        className="w-30 h-30 mx-auto object-cover rounded"
                       />
                     ) : (
                       <div className="w-16 h-16 mx-auto bg-gradient-to-br from-purple-600 to-pink-600 rounded flex items-center justify-center">
@@ -144,7 +146,7 @@ const BrowsePage = () => {
                     )}
                   </div>
                   <h3 className="text-xl font-semibold text-white mb-2">{game.title}</h3>
-                  <p className="text-gray-400 text-sm mb-4 line-clamp-2">{game.description}</p>
+                  {/* <p className="text-gray-400 text-sm mb-4 line-clamp-2">{game.description}</p> */}
                   <div className="flex items-center justify-between mb-4">
                     <span className="text-2xl font-bold text-purple-400">{formatPrice(game.price)}</span>
                     <div className="flex items-center">
@@ -156,7 +158,7 @@ const BrowsePage = () => {
                     <span className="px-2 py-1 text-xs bg-slate-700 text-gray-300 rounded">
                       {game.category}
                     </span>
-                    {game.platform.slice(0, 2).map((platform) => (
+                    {game.platforms.slice(0, 2).map((platform) => (
                       <span key={platform} className="px-2 py-1 text-xs bg-slate-700 text-gray-300 rounded">
                         {platform}
                       </span>

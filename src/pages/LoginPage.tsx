@@ -11,6 +11,7 @@ import { Link } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { LOGIN_USER } from "@/graphql/auth";
 import { useAuth } from "@/contexts/AuthContext";
+import { userClient } from "@/lib/apollo/userClient";
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -23,6 +24,7 @@ const LoginPage = () => {
   const { login } = useAuth();
   
   const [loginMutation, { loading }] = useMutation(LOGIN_USER, {
+    client: userClient,
     onCompleted: (data) => {
       const { accessToken, user } = data.login;
       login(accessToken, user);
