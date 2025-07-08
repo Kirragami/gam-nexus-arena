@@ -3,7 +3,7 @@ import { setContext } from '@apollo/client/link/context';
 
 export const createClient = (service: string) => {
   const httpLink = createHttpLink({
-    uri: `http://localhost:8080/${service}`,
+    uri: `http://192.168.49.2:30080/${service}`,
   });
 
   const authLink = setContext((_, { headers }) => {

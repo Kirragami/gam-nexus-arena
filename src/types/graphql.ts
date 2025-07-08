@@ -78,7 +78,7 @@ export interface Game {
   releaseDate: string;
   isActive: boolean;
   screenshots?: string[];
-  systemRequirements?: SystemRequirements;
+  systemRequirements?: string;
   developer: string,
   publisher: string,
   tags: string[],

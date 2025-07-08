@@ -6,12 +6,12 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { 
-  ArrowLeft, 
-  Star, 
-  ShoppingCart, 
-  Calendar, 
-  Monitor, 
+import {
+  ArrowLeft,
+  Star,
+  ShoppingCart,
+  Calendar,
+  Monitor,
   Gamepad2,
   AlertCircle,
   Play,
@@ -67,7 +67,7 @@ const GameDetailPage = () => {
           <Skeleton className="h-8 w-32 bg-slate-700" />
           <Skeleton className="h-8 w-24 bg-slate-700" />
         </nav>
-        
+
         <div className="container mx-auto px-6 py-8">
           <Skeleton className="h-8 w-24 mb-6 bg-slate-700" />
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -95,7 +95,7 @@ const GameDetailPage = () => {
             Logout
           </Button>
         </nav>
-        
+
         <div className="container mx-auto px-6 py-8">
           <div className="text-center py-12">
             <AlertCircle className="h-16 w-16 text-red-400 mx-auto mb-4" />
@@ -112,7 +112,7 @@ const GameDetailPage = () => {
 
   const allImages = [
     ...(game.imageUrl ? [game.imageUrl] : []),
-    ...(game.screenshots || [])
+    // ...(game.screenshots || [])
   ];
 
   return (
@@ -133,8 +133,8 @@ const GameDetailPage = () => {
 
       <div className="container mx-auto px-6 py-8">
         {/* Back Button */}
-        <Button 
-          variant="ghost" 
+        <Button
+          variant="ghost"
           onClick={() => navigate('/browse')}
           className="mb-6 text-white hover:text-purple-400 hover:bg-slate-800/50 animate-fade-in"
         >
@@ -145,7 +145,7 @@ const GameDetailPage = () => {
         {/* Main Content */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 animate-scale-in">
           {/* Image Gallery */}
-          <div className="space-y-4">
+          {/* <div className="space-y-4">
             <div className="relative group">
               <img 
                 src={allImages[selectedImage] || 'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=800&h=450&fit=crop'}
@@ -183,6 +183,20 @@ const GameDetailPage = () => {
                 </Carousel>
               </div>
             )}
+          </div> */}
+
+          <div className="text-6xl mb-4 text-center">
+            {game.imageUrl ? (
+              <img
+                src={game.imageUrl}
+                alt={game.title}
+                className="w-30 h-30 mx-auto object-cover rounded"
+              />
+            ) : (
+              <div className="w-16 h-16 mx-auto bg-gradient-to-br from-purple-600 to-pink-600 rounded flex items-center justify-center">
+                <Gamepad2 className="h-8 w-8 text-white" />
+              </div>
+            )}
           </div>
 
           {/* Game Info */}
@@ -199,7 +213,7 @@ const GameDetailPage = () => {
                   <span>{formatDate(game.releaseDate)}</span>
                 </div>
               </div>
-              
+
               <div className="flex flex-wrap gap-2 mb-6">
                 <Badge className="bg-purple-600 text-white hover:bg-purple-700">
                   {game.category}
@@ -226,16 +240,16 @@ const GameDetailPage = () => {
                     </Badge>
                   )}
                 </div>
-                
+
                 <div className="space-y-3">
-                  <Button 
+                  <Button
                     onClick={handlePurchase}
                     className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold py-3 text-lg transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-purple-500/25 group"
                   >
                     <ShoppingCart className="h-5 w-5 mr-2 group-hover:animate-pulse" />
                     Buy Now
                   </Button>
-                  
+
                   <div className="grid grid-cols-2 gap-2">
                     <Button variant="outline" className="border-purple-400 text-purple-400 hover:bg-purple-400 hover:text-white">
                       <Play className="h-4 w-4 mr-2" />
@@ -267,21 +281,21 @@ const GameDetailPage = () => {
                     <div>
                       <h4 className="text-purple-400 font-semibold mb-2">Minimum</h4>
                       <div className="space-y-1 text-sm text-gray-300">
-                        <p><span className="text-white">OS:</span> {game.systemRequirements.minimum.os}</p>
-                        <p><span className="text-white">Processor:</span> {game.systemRequirements.minimum.processor}</p>
+                        <p><span className="text-white"></span> {game.systemRequirements}</p>
+                        {/* <p><span className="text-white">Processor:</span> {game.systemRequirements.minimum.processor}</p>
                         <p><span className="text-white">Memory:</span> {game.systemRequirements.minimum.memory}</p>
                         <p><span className="text-white">Graphics:</span> {game.systemRequirements.minimum.graphics}</p>
-                        <p><span className="text-white">Storage:</span> {game.systemRequirements.minimum.storage}</p>
+                        <p><span className="text-white">Storage:</span> {game.systemRequirements.minimum.storage}</p> */}
                       </div>
                     </div>
                     <div>
                       <h4 className="text-purple-400 font-semibold mb-2">Recommended</h4>
                       <div className="space-y-1 text-sm text-gray-300">
-                        <p><span className="text-white">OS:</span> {game.systemRequirements.recommended.os}</p>
-                        <p><span className="text-white">Processor:</span> {game.systemRequirements.recommended.processor}</p>
-                        <p><span className="text-white">Memory:</span> {game.systemRequirements.recommended.memory}</p>
-                        <p><span className="text-white">Graphics:</span> {game.systemRequirements.recommended.graphics}</p>
-                        <p><span className="text-white">Storage:</span> {game.systemRequirements.recommended.storage}</p>
+                        <p><span className="text-white"></span> {game.systemRequirements}</p>
+                        {/* <p><span className="text-white">Processor:</span> {game.systemRequirements}</p>
+                        <p><span className="text-white">Memory:</span> {game.systemRequirements}</p>
+                        <p><span className="text-white">Graphics:</span> {game.systemRequirements}</p>
+                        <p><span className="text-white">Storage:</span> {game.systemRequirements}</p> */}
                       </div>
                     </div>
                   </div>
