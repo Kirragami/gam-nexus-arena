@@ -137,4 +137,44 @@ export interface GetGameVariables {
   id: string;
 }
 
+// Wishlist Types
+export interface WishlistItem {
+  id: string;
+  userId: string;
+  gameId: string;
+}
 
+export interface GetWishlistQuery {
+  getWishlist: WishlistItem[];
+}
+
+export interface GetWishlistVariables {
+  userId: string;
+}
+
+export interface IsInWishlistQuery {
+  isInWishlist: boolean;
+}
+
+export interface IsInWishlistVariables {
+  userId: string;
+  gameId: string;
+}
+
+export interface AddToWishlistMutation {
+  addToWishlist: WishlistItem;
+}
+
+export interface AddToWishlistVariables {
+  userId: string;
+  gameId: string;
+}
+
+export interface RemoveFromWishlistMutation {
+  removeFromWishlist: boolean;
+}
+
+export interface RemoveFromWishlistVariables {
+  userId: string;
+  gameId: string;
+}

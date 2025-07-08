@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
@@ -23,6 +22,7 @@ import { GetGameQuery, GetGameVariables } from "@/types/graphql";
 import { gameClient } from "@/lib/apollo/gameClient";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useAuth } from "@/contexts/AuthContext";
+import WishlistButton from "@/components/WishlistButton";
 
 const GameDetailPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -124,6 +124,12 @@ const GameDetailPage = () => {
           <span className="text-2xl font-bold text-white">Gam</span>
         </Link>
         <div className="flex items-center space-x-4">
+          <Link to="/browse" className="text-gray-300 hover:text-white transition-colors">
+            Browse
+          </Link>
+          <Link to="/wishlist" className="text-gray-300 hover:text-white transition-colors">
+            Wishlist
+          </Link>
           <span className="text-gray-300">Welcome, {user?.firstName || user?.username}!</span>
           <Button variant="ghost" onClick={logout} className="text-white hover:text-purple-400">
             Logout
@@ -144,47 +150,7 @@ const GameDetailPage = () => {
 
         {/* Main Content */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 animate-scale-in">
-          {/* Image Gallery */}
-          {/* <div className="space-y-4">
-            <div className="relative group">
-              <img 
-                src={allImages[selectedImage] || 'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=800&h=450&fit=crop'}
-                alt={game.title}
-                className="w-full h-96 object-cover rounded-lg shadow-2xl transition-transform duration-300 group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            </div>
-            
-            {allImages.length > 1 && (
-              <div className="relative">
-                <Carousel className="w-full">
-                  <CarouselContent>
-                    {allImages.map((image, index) => (
-                      <CarouselItem key={index} className="basis-1/3">
-                        <button
-                          onClick={() => setSelectedImage(index)}
-                          className={`relative w-full h-24 rounded-lg overflow-hidden transition-all duration-200 ${
-                            selectedImage === index 
-                              ? 'ring-2 ring-purple-400 scale-105' 
-                              : 'hover:scale-105 opacity-70 hover:opacity-100'
-                          }`}
-                        >
-                          <img 
-                            src={image}
-                            alt={`${game.title} screenshot ${index + 1}`}
-                            className="w-full h-full object-cover"
-                          />
-                        </button>
-                      </CarouselItem>
-                    ))}
-                  </CarouselContent>
-                  <CarouselPrevious className="text-white border-slate-600 hover:bg-slate-800" />
-                  <CarouselNext className="text-white border-slate-600 hover:bg-slate-800" />
-                </Carousel>
-              </div>
-            )}
-          </div> */}
-
+          {/* Image Display */}
           <div className="text-6xl mb-4 text-center">
             {game.imageUrl ? (
               <img
@@ -255,10 +221,11 @@ const GameDetailPage = () => {
                       <Play className="h-4 w-4 mr-2" />
                       Watch Trailer
                     </Button>
-                    <Button variant="outline" className="border-purple-400 text-purple-400 hover:bg-purple-400 hover:text-white">
-                      <Download className="h-4 w-4 mr-2" />
-                      Wishlist
-                    </Button>
+                    <WishlistButton
+                      gameId={game.id}
+                      userId={user?.id!}
+                      gameTitle={game.title}
+                    />
                   </div>
                 </div>
               </CardContent>
@@ -282,20 +249,12 @@ const GameDetailPage = () => {
                       <h4 className="text-purple-400 font-semibold mb-2">Minimum</h4>
                       <div className="space-y-1 text-sm text-gray-300">
                         <p><span className="text-white"></span> {game.systemRequirements}</p>
-                        {/* <p><span className="text-white">Processor:</span> {game.systemRequirements.minimum.processor}</p>
-                        <p><span className="text-white">Memory:</span> {game.systemRequirements.minimum.memory}</p>
-                        <p><span className="text-white">Graphics:</span> {game.systemRequirements.minimum.graphics}</p>
-                        <p><span className="text-white">Storage:</span> {game.systemRequirements.minimum.storage}</p> */}
                       </div>
                     </div>
                     <div>
                       <h4 className="text-purple-400 font-semibold mb-2">Recommended</h4>
                       <div className="space-y-1 text-sm text-gray-300">
                         <p><span className="text-white"></span> {game.systemRequirements}</p>
-                        {/* <p><span className="text-white">Processor:</span> {game.systemRequirements}</p>
-                        <p><span className="text-white">Memory:</span> {game.systemRequirements}</p>
-                        <p><span className="text-white">Graphics:</span> {game.systemRequirements}</p>
-                        <p><span className="text-white">Storage:</span> {game.systemRequirements}</p> */}
                       </div>
                     </div>
                   </div>

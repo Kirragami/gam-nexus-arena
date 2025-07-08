@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -60,8 +59,11 @@ const BrowsePage = () => {
           <span className="text-2xl font-bold text-white">Gam</span>
         </Link>
         <div className="flex items-center space-x-4">
+          <Link to="/wishlist" className="text-gray-300 hover:text-white transition-colors">
+            Wishlist
+          </Link>
           <span className="text-gray-300">Welcome, {user?.firstName || user?.username}!</span>
-          <Button variant="ghost" onClick={handleLogout} className="text-white hover:text-purple-400">
+          <Button variant="ghost" onClick={logout} className="text-white hover:text-purple-400">
             Logout
           </Button>
         </div>

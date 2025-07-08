@@ -11,6 +11,7 @@ import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import BrowsePage from "./pages/BrowsePage";
+import WishlistPage from "./pages/WishlistPage";
 import GameDetailPage from "./pages/GameDetailPage";
 import NotFound from "./pages/NotFound";
 
@@ -29,6 +30,7 @@ const App = () => (
               <Route path="/login" element={<LoginPage />} />
               <Route path="/signup" element={<SignupPage />} />
               <Route path="/browse" element={<BrowsePage />} />
+              <Route path="/wishlist" element={<WishlistPage />} />
               <Route path="/game/:id" element={<GameDetailPage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
