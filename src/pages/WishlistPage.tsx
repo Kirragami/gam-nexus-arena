@@ -12,7 +12,7 @@ import {
   ShoppingCart,
   Gamepad2,
   ArrowLeft,
-  Trash2
+  AlertCircle
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { wishlistClient } from "@/lib/apollo/wishlistClient";
@@ -33,34 +33,37 @@ const WishlistPage = () => {
   const navigate = useNavigate();
   const [wishlistGames, setWishlistGames] = useState<Game[]>([]);
 
-  const { data: wishlistData, loading: wishlistLoading } = useQuery<GetWishlistQuery, GetWishlistVariables>(
+  const { data: wishlistData, loading: wishlistLoading, error: wishlistError } = useQuery<GetWishlistQuery, GetWishlistVariables>(
     GET_WISHLIST,
     {
       client: wishlistClient,
       variables: { userId: user?.id! },
       skip: !user?.id,
-      errorPolicy: 'all'
+      errorPolicy: 'all',
+      pollInterval: 5000 // Refresh every 5 seconds to keep in sync
     }
   );
 
-  const gameIds = wishlistData?.getWishlist.map(item => item.gameId) || [];
+  const gameIds = wishlistData?.getWishlist?.map(item => item.gameId) || [];
 
-  const { data: gamesData, loading: gamesLoading } = useQuery<GetGamesQuery, GetGamesVariables>(
+  const { data: gamesData, loading: gamesLoading, error: gamesError } = useQuery<GetGamesQuery, GetGamesVariables>(
     GET_GAMES,
     {
       client: gameClient,
-      variables: { limit: 50 },
+      variables: { limit: 100 },
       skip: gameIds.length === 0,
       errorPolicy: 'all'
     }
   );
 
   useEffect(() => {
-    if (gamesData?.games.items && gameIds.length > 0) {
+    if (gamesData?.games?.items && gameIds.length > 0) {
       const filteredGames = gamesData.games.items.filter(game => 
         gameIds.includes(game.id)
       );
       setWishlistGames(filteredGames);
+    } else {
+      setWishlistGames([]);
     }
   }, [gamesData, gameIds]);
 
@@ -71,7 +74,28 @@ const WishlistPage = () => {
     }).format(price);
   };
 
+  const handlePurchase = (game: Game) => {
+    console.log('Purchase game:', game.title);
+    // Handle purchase logic here
+  };
+
   const loading = wishlistLoading || gamesLoading;
+  const hasError = wishlistError || gamesError;
+
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
+        <div className="text-center">
+          <AlertCircle className="h-16 w-16 text-red-400 mx-auto mb-4" />
+          <h3 className="text-xl font-semibold text-white mb-2">Authentication Required</h3>
+          <p className="text-gray-400 mb-4">Please log in to view your wishlist.</p>
+          <Button onClick={() => navigate('/login')} className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700">
+            Go to Login
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   if (loading) {
     return (
@@ -87,6 +111,45 @@ const WishlistPage = () => {
             {[...Array(6)].map((_, i) => (
               <Skeleton key={i} className="h-96 bg-slate-700 rounded-lg" />
             ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (hasError) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+        {/* Navigation */}
+        <nav className="container mx-auto px-6 py-4 flex justify-between items-center border-b border-slate-700">
+          <Link to="/" className="flex items-center space-x-2">
+            <Gamepad2 className="h-8 w-8 text-purple-400" />
+            <span className="text-2xl font-bold text-white">Gam</span>
+          </Link>
+          <div className="flex items-center space-x-4">
+            <Link to="/browse" className="text-gray-300 hover:text-white transition-colors">
+              Browse
+            </Link>
+            <span className="text-gray-300">Welcome, {user?.firstName || user?.username}!</span>
+            <Button variant="ghost" onClick={logout} className="text-white hover:text-purple-400">
+              Logout
+            </Button>
+          </div>
+        </nav>
+
+        <div className="container mx-auto px-6 py-8">
+          <div className="text-center py-16">
+            <AlertCircle className="h-24 w-24 text-red-400 mx-auto mb-6" />
+            <h2 className="text-3xl font-bold text-white mb-4">Failed to load wishlist</h2>
+            <p className="text-gray-400 mb-6 text-lg">
+              There was an error loading your wishlist. Please try again.
+            </p>
+            <Button 
+              onClick={() => window.location.reload()}
+              className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+            >
+              Retry
+            </Button>
           </div>
         </div>
       </div>
@@ -169,7 +232,7 @@ const WishlistPage = () => {
                     <div className="absolute top-4 right-4">
                       <WishlistButton
                         gameId={game.id}
-                        userId={user?.id!}
+                        userId={user.id}
                         gameTitle={game.title}
                         variant="icon"
                       />
@@ -203,6 +266,7 @@ const WishlistPage = () => {
                       </span>
                       <Button
                         size="sm"
+                        onClick={() => handlePurchase(game)}
                         className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 transition-all duration-300 hover:scale-105"
                       >
                         <ShoppingCart className="h-4 w-4 mr-2" />
