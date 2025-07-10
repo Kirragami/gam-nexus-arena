@@ -178,3 +178,27 @@ export interface RemoveFromWishlistVariables {
   userId: string;
   gameId: string;
 }
+
+// Payment Types
+export interface PaymentInput {
+  userId: string;
+  gameId: string;
+}
+
+export interface PaymentResponse {
+  success: boolean;
+  message: string;
+  paymentId: string;
+}
+
+export interface InitiatePaymentMutation {
+  initiatePayment: PaymentResponse;
+}
+
+export interface InitiatePaymentVariables {
+  input: PaymentInput;
+}
+
+export interface HealthQuery {
+  health: string;
+}
