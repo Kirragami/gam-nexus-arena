@@ -6,12 +6,13 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Gamepad2, Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { LOGIN_USER } from "@/graphql/auth";
 import { useAuth } from "@/contexts/AuthContext";
 import { userClient } from "@/lib/apollo/userClient";
+import Layout from "@/components/Layout";
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -26,8 +27,8 @@ const LoginPage = () => {
   const [loginMutation, { loading }] = useMutation(LOGIN_USER, {
     client: userClient,
     onCompleted: (data) => {
-      const { accessToken, user } = data.login;
-      login(accessToken, user);
+      const { accessToken, refreshToken, user } = data.login;
+      login(accessToken, user, refreshToken);
       toast({
         title: "Login successful",
         description: `Welcome back, ${user.firstName || user.username}!`
@@ -63,23 +64,16 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center p-4">
-      {/* Background Gaming Elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-purple-600/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-pink-600/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
-      </div>
-
-      <div className="relative z-10 w-full max-w-md">
-        {/* Logo */}
-        <div className="text-center mb-8">
-          <Link to="/" className="inline-flex items-center space-x-2 text-white hover:text-purple-400 transition-colors">
-            <Gamepad2 className="h-10 w-10" />
-            <span className="text-3xl font-bold">Gam</span>
-          </Link>
+    <Layout showNavigation={false}>
+      <div className="flex items-center justify-center p-4 min-h-screen">
+        {/* Background Gaming Elements */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-purple-600/10 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-pink-600/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
         </div>
 
-        {/* Login Card */}
+        <div className="relative z-10 w-full max-w-md">
+          {/* Login Card */}
         <Card className="bg-slate-800/80 backdrop-blur-xl border-purple-500/20 shadow-2xl">
           <CardHeader className="text-center">
             <CardTitle className="text-2xl font-bold text-white">Welcome Back</CardTitle>
@@ -151,8 +145,9 @@ const LoginPage = () => {
             </div>
           </CardContent>
         </Card>
+        </div>
       </div>
-    </div>
+    </Layout>
   );
 };
 

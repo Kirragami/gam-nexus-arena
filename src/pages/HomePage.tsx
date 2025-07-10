@@ -1,27 +1,14 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Gamepad2, Zap, Trophy, Users } from "lucide-react";
+import { Zap, Trophy, Users } from "lucide-react";
 import { Link } from "react-router-dom";
+import Layout from "@/components/Layout";
 
 const HomePage = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
-      {/* Navigation */}
-      <nav className="container mx-auto px-6 py-4 flex justify-between items-center">
-        <div className="flex items-center space-x-2">
-          <Gamepad2 className="h-8 w-8 text-purple-400" />
-          <span className="text-2xl font-bold text-white">Gam</span>
-        </div>
-        <div className="flex space-x-4">
-          <Button variant="ghost" asChild className="text-white hover:text-purple-400">
-            <Link to="/login">Login</Link>
-          </Button>
-          <Button asChild className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700">
-            <Link to="/signup">Sign Up</Link>
-          </Button>
-        </div>
-      </nav>
+    <Layout>
+      <div className="container mx-auto px-6 py-8">
 
       {/* Hero Section */}
       <section className="container mx-auto px-6 py-20 text-center">
@@ -91,7 +78,8 @@ const HomePage = () => {
       <footer className="container mx-auto px-6 py-8 text-center border-t border-slate-700">
         <p className="text-gray-400">© 2024 Gam. All rights reserved.</p>
       </footer>
-    </div>
+      </div>
+    </Layout>
   );
 };
 

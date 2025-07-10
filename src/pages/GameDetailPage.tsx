@@ -23,11 +23,12 @@ import { gameClient } from "@/lib/apollo/gameClient";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useAuth } from "@/contexts/AuthContext";
 import WishlistButton from "@/components/WishlistButton";
+import Layout from "@/components/Layout";
 
 const GameDetailPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { user, logout } = useAuth();
+  const { user, isAuthenticated } = useAuth();
   const [selectedImage, setSelectedImage] = useState(0);
 
   const { data, loading, error } = useQuery<GetGameQuery, GetGameVariables>(GET_GAME_BY_ID, {
@@ -85,17 +86,7 @@ const GameDetailPage = () => {
 
   if (error || !game) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
-        <nav className="container mx-auto px-6 py-4 flex justify-between items-center border-b border-slate-700">
-          <Link to="/" className="flex items-center space-x-2">
-            <Gamepad2 className="h-8 w-8 text-purple-400" />
-            <span className="text-2xl font-bold text-white">Gam</span>
-          </Link>
-          <Button variant="ghost" onClick={logout} className="text-white hover:text-purple-400">
-            Logout
-          </Button>
-        </nav>
-
+      <Layout>
         <div className="container mx-auto px-6 py-8">
           <div className="text-center py-12">
             <AlertCircle className="h-16 w-16 text-red-400 mx-auto mb-4" />
@@ -106,7 +97,7 @@ const GameDetailPage = () => {
             </Button>
           </div>
         </div>
-      </div>
+      </Layout>
     );
   }
 
@@ -116,27 +107,7 @@ const GameDetailPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
-      {/* Navigation */}
-      <nav className="container mx-auto px-6 py-4 flex justify-between items-center border-b border-slate-700">
-        <Link to="/" className="flex items-center space-x-2">
-          <Gamepad2 className="h-8 w-8 text-purple-400" />
-          <span className="text-2xl font-bold text-white">Gam</span>
-        </Link>
-        <div className="flex items-center space-x-4">
-          <Link to="/browse" className="text-gray-300 hover:text-white transition-colors">
-            Browse
-          </Link>
-          <Link to="/wishlist" className="text-gray-300 hover:text-white transition-colors">
-            Wishlist
-          </Link>
-          <span className="text-gray-300">Welcome, {user?.firstName || user?.username}!</span>
-          <Button variant="ghost" onClick={logout} className="text-white hover:text-purple-400">
-            Logout
-          </Button>
-        </div>
-      </nav>
-
+    <Layout>
       <div className="container mx-auto px-6 py-8">
         {/* Back Button */}
         <Button
@@ -264,7 +235,7 @@ const GameDetailPage = () => {
           </div>
         </div>
       </div>
-    </div>
+    </Layout>
   );
 };
 

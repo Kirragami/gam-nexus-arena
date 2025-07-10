@@ -1,18 +1,19 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Gamepad2, Search, Filter, Star, AlertCircle } from "lucide-react";
+import { Search, Filter, Star, AlertCircle, Gamepad2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/contexts/AuthContext";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { GET_GAMES } from "@/graphql/games";
 import { GetGamesQuery, GetGamesVariables } from "@/types/graphql";
 import { useState } from "react";
 import { gameClient } from "@/lib/apollo/gameClient";
+import Layout from "@/components/Layout";
 
 const BrowsePage = () => {
-  const { user, logout } = useAuth();
+  const { user, isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
 
@@ -25,10 +26,6 @@ const BrowsePage = () => {
     },
     errorPolicy: 'all'
   });
-
-  const handleLogout = () => {
-    logout();
-  };
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -51,24 +48,7 @@ const BrowsePage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
-      {/* Navigation */}
-      <nav className="container mx-auto px-6 py-4 flex justify-between items-center border-b border-slate-700">
-        <Link to="/" className="flex items-center space-x-2">
-          <Gamepad2 className="h-8 w-8 text-purple-400" />
-          <span className="text-2xl font-bold text-white">Gam</span>
-        </Link>
-        <div className="flex items-center space-x-4">
-          <Link to="/wishlist" className="text-gray-300 hover:text-white transition-colors">
-            Wishlist
-          </Link>
-          <span className="text-gray-300">Welcome, {user?.firstName || user?.username}!</span>
-          <Button variant="ghost" onClick={logout} className="text-white hover:text-purple-400">
-            Logout
-          </Button>
-        </div>
-      </nav>
-
+    <Layout>
       <div className="container mx-auto px-6 py-8">
         {/* Header */}
         <div className="mb-8">
@@ -209,7 +189,7 @@ const BrowsePage = () => {
           </div>
         )}
       </div>
-    </div>
+    </Layout>
   );
 };
 
