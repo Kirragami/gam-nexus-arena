@@ -28,6 +28,7 @@ import { INITIATE_PAYMENT } from "@/graphql/payment";
 import { InitiatePaymentMutation, InitiatePaymentVariables } from "@/types/graphql";
 import { paymentClient } from "@/lib/apollo/paymentClient";
 import { useToast } from "@/hooks/use-toast";
+import GameOwnershipButton from "@/components/GameOwnershipButton";
 
 const GameDetailPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -45,36 +46,6 @@ const GameDetailPage = () => {
 
   const game = data?.game;
 
-  const [initiatePayment, { loading: paymentLoading }] = useMutation<InitiatePaymentMutation, InitiatePaymentVariables>(
-    INITIATE_PAYMENT,
-    {
-      client: paymentClient,
-      onCompleted: (data) => {
-        if (data.initiatePayment.success) {
-          toast({
-            title: "Payment Initiated",
-            description: `Payment ID: ${data.initiatePayment.paymentId}`,
-          });
-          console.log('Payment initiated successfully:', data.initiatePayment);
-        } else {
-          toast({
-            title: "Payment Failed",
-            description: data.initiatePayment.message,
-            variant: "destructive",
-          });
-        }
-      },
-      onError: (error) => {
-        toast({
-          title: "Payment Error",
-          description: error.message,
-          variant: "destructive",
-        });
-        console.error('Payment error:', error);
-      }
-    }
-  );
-
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
@@ -88,42 +59,6 @@ const GameDetailPage = () => {
       month: 'long',
       day: 'numeric'
     });
-  };
-
-  const handlePurchase = async () => {
-    if (!isAuthenticated || !user) {
-      toast({
-        title: "Authentication Required",
-        description: "Please log in to purchase games",
-        variant: "destructive",
-      });
-      navigate('/login');
-      return;
-    }
-
-    if (!game) {
-      toast({
-        title: "Error",
-        description: "Game information not available",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    console.log('Initiating payment for game:', game.title, 'User:', user.id);
-    
-    try {
-      await initiatePayment({
-        variables: {
-          input: {
-            userId: user.id,
-            gameId: game.id
-          }
-        }
-      });
-    } catch (error) {
-      console.error('Payment initiation failed:', error);
-    }
   };
 
   if (loading) {
@@ -245,14 +180,10 @@ const GameDetailPage = () => {
                 </div>
 
                 <div className="space-y-3">
-                  <Button
-                    onClick={handlePurchase}
-                    disabled={paymentLoading}
-                    className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold py-3 text-lg transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-purple-500/25 group"
-                  >
-                    <ShoppingCart className="h-5 w-5 mr-2 group-hover:animate-pulse" />
-                    {paymentLoading ? 'Processing...' : 'Buy Now'}
-                  </Button>
+                  <GameOwnershipButton
+                    gameId={game.id}
+                    gameTitle={game.title}
+                  />
 
                   <div className="grid grid-cols-2 gap-2">
                     <Button variant="outline" className="border-purple-400 text-purple-400 hover:bg-purple-400 hover:text-white">

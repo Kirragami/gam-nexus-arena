@@ -1,4 +1,3 @@
-
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -13,6 +12,7 @@ import BrowsePage from "./pages/BrowsePage";
 import WishlistPage from "./pages/WishlistPage";
 import GameDetailPage from "./pages/GameDetailPage";
 import NotFound from "./pages/NotFound";
+import LibraryPage from "./pages/LibraryPage";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -36,6 +36,7 @@ const App = () => (
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/signup" element={<SignupPage />} />
                 <Route path="/browse" element={<BrowsePage />} />
+                <Route path="/library" element={<LibraryPage />} />
                 <Route path="/wishlist" element={<WishlistPage />} />
                 <Route path="/game/:id" element={<GameDetailPage />} />
                 <Route path="*" element={<NotFound />} />

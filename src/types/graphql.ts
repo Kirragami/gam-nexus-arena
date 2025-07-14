@@ -202,3 +202,21 @@ export interface InitiatePaymentVariables {
 export interface HealthQuery {
   health: string;
 }
+
+// Inventory Types
+export interface GetInventoryQuery {
+  getInventory: Game[];
+}
+
+export interface GetInventoryVariables {
+  userId: string;
+}
+
+export interface OwnsGameQuery {
+  ownsGame: boolean;
+}
+
+export interface OwnsGameVariables {
+  userId: string;
+  gameId: string;
+}

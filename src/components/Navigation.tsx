@@ -51,6 +51,9 @@ const Navigation = ({ className = "" }: NavigationProps) => {
                 <Link to="/browse" className="text-gray-300 hover:text-white transition-colors">
                   Browse
                 </Link>
+                <Link to="/library" className="text-gray-300 hover:text-white transition-colors">
+                  Library
+                </Link>
                 <Link to="/wishlist" className="text-gray-300 hover:text-white transition-colors">
                   Wishlist
                 </Link>
@@ -117,6 +120,13 @@ const Navigation = ({ className = "" }: NavigationProps) => {
                     Browse
                   </Link>
                   <Link
+                    to="/library"
+                    className="text-xl text-gray-300 hover:text-white transition-colors py-2"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    Library
+                  </Link>
+                  <Link
                     to="/wishlist"
                     className="text-xl text-gray-300 hover:text-white transition-colors py-2"
                     onClick={() => setIsMobileMenuOpen(false)}
@@ -162,4 +172,4 @@ const Navigation = ({ className = "" }: NavigationProps) => {
   );
 };
 
-export default Navigation; 
+export default Navigation;
