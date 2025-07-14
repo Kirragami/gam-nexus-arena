@@ -25,7 +25,7 @@ const HomePage = () => {
               <Link to="/signup">Start Gaming</Link>
             </Button>
             <Button size="lg" variant="outline" className="border-purple-400 text-purple-400 hover:bg-purple-400 hover:text-white py-3 px-8 rounded-full transition-all duration-300">
-              Explore Games
+              <Link to="/browse">Explore Games</Link>
             </Button>
           </div>
         </div>

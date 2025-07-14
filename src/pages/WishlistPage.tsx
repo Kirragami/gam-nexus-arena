@@ -114,6 +114,12 @@ const WishlistPage = () => {
           <Link to="/browse" className="text-gray-300 hover:text-white transition-colors">
             Browse
           </Link>
+          <Link to="/library" className="text-gray-300 hover:text-white transition-colors">
+            Library
+          </Link>
+          <Link to="/wishlist" className="text-gray-300 hover:text-white transition-colors">
+            Wishlist
+          </Link>
           <span className="text-gray-300">Welcome, {user?.firstName || user?.username}!</span>
           <Button variant="ghost" onClick={logout} className="text-white hover:text-purple-400">
             Logout

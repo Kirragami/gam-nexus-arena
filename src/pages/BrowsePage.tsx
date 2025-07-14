@@ -71,10 +71,10 @@ const BrowsePage = () => {
             <Search className="h-4 w-4 mr-2" />
             Search
           </Button>
-          <Button variant="outline" className="border-purple-400 text-purple-400 hover:bg-purple-400 hover:text-white">
+          {/* <Button variant="outline" className="border-purple-400 text-purple-400 hover:bg-purple-400 hover:text-white">
             <Filter className="h-4 w-4 mr-2" />
             Filter
-          </Button>
+          </Button> */}
         </form>
 
         {/* Loading State */}
