@@ -204,8 +204,14 @@ export interface HealthQuery {
 }
 
 // Inventory Types
+export interface InventoryItem {
+  id: string;
+  userId: string;
+  gameId: string;
+}
+
 export interface GetInventoryQuery {
-  getInventory: Game[];
+  getInventory: InventoryItem[];
 }
 
 export interface GetInventoryVariables {

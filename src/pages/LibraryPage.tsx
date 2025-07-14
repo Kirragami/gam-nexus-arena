@@ -1,5 +1,5 @@
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -11,12 +11,16 @@ import EmptyLibrary from '@/components/library/EmptyLibrary';
 import LibraryLoadingSkeleton from '@/components/library/LibraryLoadingSkeleton';
 import LibraryErrorState from '@/components/library/LibraryErrorState';
 import { GET_INVENTORY } from '@/graphql/inventory';
-import { GetInventoryQuery, GetInventoryVariables } from '@/types/graphql';
+import { GET_GAME_BY_ID } from '@/graphql/games';
+import { GetInventoryQuery, GetInventoryVariables, GetGameQuery, GetGameVariables, Game } from '@/types/graphql';
 import { inventoryClient } from '@/lib/apollo/inventoryClient';
+import { gameClient } from '@/lib/apollo/gameClient';
 
 const LibraryPage = () => {
   const { user, isAuthenticated } = useAuth();
   const navigate = useNavigate();
+  const [games, setGames] = useState<Game[]>([]);
+  const [loadingGames, setLoadingGames] = useState(false);
 
   // Redirect to browse if user logs out
   useEffect(() => {
@@ -25,7 +29,7 @@ const LibraryPage = () => {
     }
   }, [isAuthenticated, navigate]);
 
-  const { data, loading, error, refetch } = useQuery<GetInventoryQuery, GetInventoryVariables>(
+  const { data: inventoryData, loading: inventoryLoading, error: inventoryError, refetch } = useQuery<GetInventoryQuery, GetInventoryVariables>(
     GET_INVENTORY,
     {
       client: inventoryClient,
@@ -35,9 +39,44 @@ const LibraryPage = () => {
     }
   );
 
+  // Fetch game details when inventory data is available
+  useEffect(() => {
+    const fetchGameDetails = async () => {
+      if (!inventoryData?.getInventory || inventoryData.getInventory.length === 0) {
+        setGames([]);
+        return;
+      }
+
+      setLoadingGames(true);
+      const gamePromises = inventoryData.getInventory.map(async (item) => {
+        try {
+          const result = await gameClient.query<GetGameQuery, GetGameVariables>({
+            query: GET_GAME_BY_ID,
+            variables: { id: item.gameId },
+            errorPolicy: 'all'
+          });
+          return result.data?.game;
+        } catch (error) {
+          console.error(`Failed to fetch game ${item.gameId}:`, error);
+          return null;
+        }
+      });
+
+      const gameResults = await Promise.all(gamePromises);
+      const validGames = gameResults.filter((game): game is Game => game !== null);
+      setGames(validGames);
+      setLoadingGames(false);
+    };
+
+    fetchGameDetails();
+  }, [inventoryData]);
+
   const handleRetry = () => {
     refetch();
   };
+
+  const isLoading = inventoryLoading || loadingGames;
+  const hasError = inventoryError && !inventoryLoading;
 
   return (
     <ProtectedRoute>
@@ -45,26 +84,26 @@ const LibraryPage = () => {
         <div className="container mx-auto px-6 py-8">
           <LibraryHeader />
 
-          {loading && <LibraryLoadingSkeleton />}
+          {isLoading && <LibraryLoadingSkeleton />}
 
-          {error && !loading && (
+          {hasError && !isLoading && (
             <LibraryErrorState onRetry={handleRetry} />
           )}
 
-          {data && !loading && !error && (
+          {!isLoading && !hasError && (
             <>
-              {data.getInventory.length === 0 ? (
+              {games.length === 0 ? (
                 <EmptyLibrary />
               ) : (
                 <>
                   <div className="mb-6 animate-fade-in">
                     <p className="text-gray-400 text-lg">
-                      {data.getInventory.length} {data.getInventory.length === 1 ? 'game' : 'games'} in your library
+                      {games.length} {games.length === 1 ? 'game' : 'games'} in your library
                     </p>
                   </div>
                   
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                    {data.getInventory.map((game, index) => (
+                    {games.map((game, index) => (
                       <div
                         key={game.id}
                         style={{

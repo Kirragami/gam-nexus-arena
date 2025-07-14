@@ -5,16 +5,8 @@ export const GET_INVENTORY = gql`
   query GetInventory($userId: String!) {
     getInventory(userId: $userId) {
       id
-      title
-      description
-      price
-      rating
-      imageUrl
-      category
-      platforms
-      releaseDate
-      isActive
-      createdAt
+      userId
+      gameId
     }
   }
 `;
