@@ -1,3 +1,2 @@
-
 import { createClient } from './clientCreator';
-export const paymentClient = createClient('gateway');
+export const paymentClient = createClient('payment');

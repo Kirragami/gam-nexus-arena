@@ -12,7 +12,7 @@ export const GET_WISHLIST = gql`
 `;
 
 export const IS_IN_WISHLIST = gql`
-  query IsInWishlist($userId: String!, $gameId: String!) {
+  query isInWishlist($userId: String!, $gameId: String!) {
     isInWishlist(userId: $userId, gameId: $gameId)
   }
 `;
