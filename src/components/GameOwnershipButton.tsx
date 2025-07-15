@@ -48,8 +48,8 @@ const GameOwnershipButton = ({ gameId, gameTitle, disabled = false }: GameOwners
       onCompleted: (data) => {
         if (data.initiatePayment.success) {
           toast({
-            title: "Payment Initiated",
-            description: `Payment ID: ${data.initiatePayment.paymentId}`,
+            title: "Thank you for your purchase",
+            description: `Your game will be added to your library soon`,
           });
           console.log('Payment initiated successfully:', data.initiatePayment);
         } else {
