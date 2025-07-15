@@ -35,9 +35,16 @@ const LibraryPage = () => {
       client: inventoryClient,
       variables: { userId: user?.id || '' },
       skip: !user?.id,
-      errorPolicy: 'all'
+      errorPolicy: 'all',
+      pollInterval: 5000
     }
   );
+
+  useEffect(() => {
+    if(user?.id) {
+      refetch()
+    }
+  }, [location.pathname])
 
   // Fetch game details when inventory data is available
   useEffect(() => {

@@ -27,7 +27,7 @@ const WishlistPage = () => {
   const navigate = useNavigate();
   const [wishlistGames, setWishlistGames] = useState<Game[]>([]);
 
-  const { data: wishlistData, loading: wishlistLoading, error: wishlistError } = useQuery<GetWishlistQuery, GetWishlistVariables>(
+  const { data: wishlistData, loading: wishlistLoading, error: wishlistError, refetch } = useQuery<GetWishlistQuery, GetWishlistVariables>(
     GET_WISHLIST,
     {
       client: wishlistClient,
@@ -37,6 +37,12 @@ const WishlistPage = () => {
       pollInterval: 5000
     }
   );
+
+  useEffect(() => {
+    if (user?.id) {
+      refetch();
+    }
+  }, [location.pathname])
 
   const gameIds = wishlistData?.getWishlist?.map(item => item.gameId) || [];
 

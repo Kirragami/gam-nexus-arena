@@ -1,2 +1,2 @@
 import { createClient } from './clientCreator';
-export const paymentClient = createClient('payment');
+export const paymentClient = createClient('graphql');

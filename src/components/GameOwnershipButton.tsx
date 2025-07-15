@@ -36,7 +36,8 @@ const GameOwnershipButton = ({ gameId, gameTitle, disabled = false }: GameOwners
       client: inventoryClient,
       variables: { userId: user?.id || '', gameId },
       skip: !user?.id || !gameId,
-      errorPolicy: 'all'
+      errorPolicy: 'all',
+      pollInterval: 5000
     }
   );
 
@@ -106,6 +107,7 @@ const GameOwnershipButton = ({ gameId, gameTitle, disabled = false }: GameOwners
       console.error('Payment initiation failed:', error);
     } finally {
       setTimeout(() => setIsAnimating(false), 300);
+      
     }
   };
 

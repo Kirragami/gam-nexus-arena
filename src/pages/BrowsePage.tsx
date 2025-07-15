@@ -104,8 +104,8 @@ const BrowsePage = () => {
             <p className="text-gray-400 mb-4">
               Unable to connect to the games service. Please try again later.
             </p>
-            <Button 
-              onClick={() => refetch()} 
+            <Button
+              onClick={() => refetch()}
               className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
             >
               Try Again
@@ -117,22 +117,24 @@ const BrowsePage = () => {
         {data?.games?.items && data.games.items.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {data.games.items.map((game) => (
-              <Card 
-                key={game.id} 
+              <Card
+                key={game.id}
                 className="bg-slate-800/50 border-purple-500/20 backdrop-blur-sm hover:bg-slate-800/70 transition-all duration-300 transform hover:scale-105 cursor-pointer"
                 onClick={() => handleGameClick(game.id)}
               >
                 <CardContent className="p-6">
                   <div className="text-6xl mb-4 text-center">
                     {game.imageUrl ? (
-                      <img 
-                        src={game.imageUrl} 
-                        alt={game.title}
-                        className="w-30 h-30 mx-auto object-cover rounded"
-                      />
+                      <div className="w-40 h-64 mx-auto flex items-center justify-center overflow-hidden rounded bg-gray-800">
+                        <img
+                          src={game.imageUrl}
+                          alt={game.title}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
                     ) : (
-                      <div className="w-16 h-16 mx-auto bg-gradient-to-br from-purple-600 to-pink-600 rounded flex items-center justify-center">
-                        <Gamepad2 className="h-8 w-8 text-white" />
+                      <div className="w-40 h-64 mx-auto bg-gradient-to-br from-purple-600 to-pink-600 rounded flex items-center justify-center">
+                        <Gamepad2 className="h-12 w-12 text-white" />
                       </div>
                     )}
                   </div>
@@ -154,7 +156,7 @@ const BrowsePage = () => {
                       </span>
                     ))}
                   </div>
-                  <Button 
+                  <Button
                     className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
                     onClick={(e) => {
                       e.stopPropagation();

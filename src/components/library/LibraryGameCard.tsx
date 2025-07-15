@@ -77,7 +77,7 @@ const LibraryGameCard = ({ game }: LibraryGameCardProps) => {
               </div>
             </div>
 
-            <div className="flex flex-wrap gap-2 mb-4">
+            <div className="flex gap-2 mb-4">
               <Badge className="bg-purple-600/20 text-purple-300 border-purple-500/30">
                 {game.category}
               </Badge>

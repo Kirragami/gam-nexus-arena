@@ -61,7 +61,7 @@ const HomePage = () => {
       </section>
 
       {/* Coming Soon Section */}
-      <section className="container mx-auto px-6 py-16 text-center">
+      {/* <section className="container mx-auto px-6 py-16 text-center">
         <div className="bg-gradient-to-r from-purple-600/20 to-pink-600/20 rounded-3xl p-12 backdrop-blur-sm border border-purple-500/20">
           <h2 className="text-4xl font-bold text-white mb-4">Games Library Coming Soon</h2>
           <p className="text-gray-300 text-lg mb-8 max-w-2xl mx-auto">
@@ -72,11 +72,11 @@ const HomePage = () => {
             <Link to="/signup">Get Early Access</Link>
           </Button>
         </div>
-      </section>
+      </section> */}
 
       {/* Footer */}
       <footer className="container mx-auto px-6 py-8 text-center border-t border-slate-700">
-        <p className="text-gray-400">© 2024 Gam. All rights reserved.</p>
+        <p className="text-gray-400">© 2025 Gam. All rights reserved. Made by Kirra</p>
       </footer>
       </div>
     </Layout>

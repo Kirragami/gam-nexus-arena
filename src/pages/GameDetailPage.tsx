@@ -123,19 +123,20 @@ const GameDetailPage = () => {
         {/* Main Content */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 animate-scale-in">
           {/* Image Display */}
-          <div className="text-6xl mb-4 text-center">
+          <div className="flex items-center justify-center">
             {game.imageUrl ? (
               <img
                 src={game.imageUrl}
                 alt={game.title}
-                className="w-30 h-30 mx-auto object-cover rounded"
+                className="max-w-xs lg:max-w-sm h-auto object-contain rounded shadow-md"
               />
             ) : (
-              <div className="w-16 h-16 mx-auto bg-gradient-to-br from-purple-600 to-pink-600 rounded flex items-center justify-center">
-                <Gamepad2 className="h-8 w-8 text-white" />
+              <div className="w-20 h-20 bg-gradient-to-br from-purple-600 to-pink-600 rounded flex items-center justify-center">
+                <Gamepad2 className="h-10 w-10 text-white" />
               </div>
             )}
           </div>
+
 
           {/* Game Info */}
           <div className="space-y-6">
