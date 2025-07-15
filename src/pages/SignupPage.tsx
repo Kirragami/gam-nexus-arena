@@ -118,7 +118,7 @@ const SignupPage = () => {
                     id="firstName"
                     name="firstName"
                     type="text"
-                    placeholder="John"
+                    placeholder="Firstname"
                     value={formData.firstName}
                     onChange={handleInputChange}
                     className="bg-slate-700/50 border-slate-600 text-white placeholder:text-gray-400 focus:border-purple-400 focus:ring-purple-400"
@@ -130,7 +130,7 @@ const SignupPage = () => {
                     id="lastName"
                     name="lastName"
                     type="text"
-                    placeholder="Doe"
+                    placeholder="Lastname"
                     value={formData.lastName}
                     onChange={handleInputChange}
                     className="bg-slate-700/50 border-slate-600 text-white placeholder:text-gray-400 focus:border-purple-400 focus:ring-purple-400"
