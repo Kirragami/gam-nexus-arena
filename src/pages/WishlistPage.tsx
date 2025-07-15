@@ -33,8 +33,7 @@ const WishlistPage = () => {
       client: wishlistClient,
       variables: { userId: user?.id! },
       skip: !user?.id,
-      errorPolicy: 'all',
-      pollInterval: 5000
+      errorPolicy: 'all'
     }
   );
 
